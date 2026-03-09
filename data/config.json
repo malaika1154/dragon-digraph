@@ -1,0 +1,56 @@
+{
+  "appName": "Dragon Digraph",
+  "appTagline": "Master English Blends through Speech and Play!",
+  "targetAge": "4–9",
+  "avatars": [
+    {
+      "id": "flame",
+      "name": "Flame",
+      "emoji": "🐉",
+      "color": "#e74c3c",
+      "description": "A fiery red dragon who loves to roar!"
+    },
+    {
+      "id": "frost",
+      "name": "Frost",
+      "emoji": "🐲",
+      "color": "#3498db",
+      "description": "A cool blue dragon who sparkles in the snow!"
+    },
+    {
+      "id": "leaf",
+      "name": "Leaf",
+      "emoji": "🦎",
+      "color": "#2ecc71",
+      "description": "A gentle green dragon who hides in the forest!"
+    }
+  ],
+  "stageTypes": [
+    {
+      "id": "listen",
+      "name": "Listen & Learn",
+      "icon": "🔊",
+      "description": "Hear the blend and learn example words"
+    },
+    {
+      "id": "quiz",
+      "name": "Blend Quiz",
+      "icon": "❓",
+      "description": "Pick the right blend to complete each word"
+    },
+    {
+      "id": "dragdrop",
+      "name": "Drag & Drop",
+      "icon": "🎯",
+      "description": "Drag the correct blend into the word"
+    },
+    {
+      "id": "speech",
+      "name": "Say It!",
+      "icon": "🎤",
+      "description": "Say the blend and word out loud"
+    }
+  ],
+  "passThreshold": 3,
+  "questionsPerStage": 5
+}

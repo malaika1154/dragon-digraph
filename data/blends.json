@@ -1,0 +1,364 @@
+{
+  "blends": [
+    {
+      "id": "ch",
+      "blend": "ch",
+      "island": {
+        "name": "Cherry Island",
+        "icon": "🍒",
+        "color": "#e74c3c",
+        "background": "#fde8e8"
+      },
+      "pronunciation": "ch as in chair",
+      "examples": ["chair", "cheese", "chest", "chicken", "chip", "chalk", "cherry", "chin"],
+      "stages": {
+        "listen": {
+          "words": [
+            { "word": "chair", "image": "img/chair.png" },
+            { "word": "chicken", "image": "img/chicken.png" },
+            { "word": "cheese", "image": null },
+            { "word": "cherry", "image": null },
+            { "word": "chest", "image": null }
+          ]
+        },
+        "quiz": {
+          "questions": [
+            { "prompt": "_air", "answer": "ch", "options": ["ch", "sh", "th", "wh"], "fullWord": "chair" },
+            { "prompt": "_eese", "answer": "ch", "options": ["ch", "ph", "sh", "th"], "fullWord": "cheese" },
+            { "prompt": "_est", "answer": "ch", "options": ["sh", "ch", "wh", "th"], "fullWord": "chest" },
+            { "prompt": "_in", "answer": "ch", "options": ["th", "sh", "ch", "ph"], "fullWord": "chin" },
+            { "prompt": "_ip", "answer": "ch", "options": ["sh", "wh", "th", "ch"], "fullWord": "chip" },
+            { "prompt": "_alk", "answer": "ch", "options": ["ch", "th", "sh", "wh"], "fullWord": "chalk" }
+          ]
+        },
+        "dragdrop": {
+          "questions": [
+            { "prompt": "_erry", "answer": "ch", "distractors": ["sh", "th"], "fullWord": "cherry" },
+            { "prompt": "_icken", "answer": "ch", "distractors": ["sh", "ck"], "fullWord": "chicken" },
+            { "prompt": "_air", "answer": "ch", "distractors": ["th", "wh"], "fullWord": "chair" },
+            { "prompt": "_eese", "answer": "ch", "distractors": ["sh", "ph"], "fullWord": "cheese" },
+            { "prompt": "_alk", "answer": "ch", "distractors": ["th", "wh"], "fullWord": "chalk" }
+          ]
+        },
+        "speech": {
+          "words": ["chair", "cheese", "cherry", "chicken", "chip"]
+        }
+      }
+    },
+    {
+      "id": "ck",
+      "blend": "ck",
+      "island": {
+        "name": "Clock Island",
+        "icon": "⏰",
+        "color": "#f39c12",
+        "background": "#fef5e7"
+      },
+      "pronunciation": "ck as in clock",
+      "examples": ["clock", "duck", "kick", "lock", "neck", "rock", "sock", "truck"],
+      "stages": {
+        "listen": {
+          "words": [
+            { "word": "clock", "image": null },
+            { "word": "duck", "image": null },
+            { "word": "kick", "image": null },
+            { "word": "rock", "image": null },
+            { "word": "sock", "image": null }
+          ]
+        },
+        "quiz": {
+          "questions": [
+            { "prompt": "clo_", "answer": "ck", "options": ["ck", "ch", "ng", "sh"], "fullWord": "clock" },
+            { "prompt": "du_", "answer": "ck", "options": ["sh", "ck", "th", "ch"], "fullWord": "duck" },
+            { "prompt": "ki_", "answer": "ck", "options": ["ck", "ng", "sh", "th"], "fullWord": "kick" },
+            { "prompt": "lo_", "answer": "ck", "options": ["ch", "th", "ck", "ng"], "fullWord": "lock" },
+            { "prompt": "ne_", "answer": "ck", "options": ["ck", "sh", "ch", "th"], "fullWord": "neck" },
+            { "prompt": "ro_", "answer": "ck", "options": ["ng", "ck", "th", "ch"], "fullWord": "rock" }
+          ]
+        },
+        "dragdrop": {
+          "questions": [
+            { "prompt": "so_", "answer": "ck", "distractors": ["ch", "ng"], "fullWord": "sock" },
+            { "prompt": "tru_", "answer": "ck", "distractors": ["sh", "th"], "fullWord": "truck" },
+            { "prompt": "du_", "answer": "ck", "distractors": ["ch", "ng"], "fullWord": "duck" },
+            { "prompt": "lo_", "answer": "ck", "distractors": ["sh", "th"], "fullWord": "lock" },
+            { "prompt": "ki_", "answer": "ck", "distractors": ["ng", "ch"], "fullWord": "kick" }
+          ]
+        },
+        "speech": {
+          "words": ["clock", "duck", "kick", "rock", "sock"]
+        }
+      }
+    },
+    {
+      "id": "ng",
+      "blend": "ng",
+      "island": {
+        "name": "Singing Island",
+        "icon": "🎵",
+        "color": "#9b59b6",
+        "background": "#f4ecf7"
+      },
+      "pronunciation": "ng as in ring",
+      "examples": ["ring", "song", "king", "long", "bang", "sing", "wing", "string"],
+      "stages": {
+        "listen": {
+          "words": [
+            { "word": "ring", "image": null },
+            { "word": "song", "image": null },
+            { "word": "king", "image": null },
+            { "word": "sing", "image": null },
+            { "word": "wing", "image": null }
+          ]
+        },
+        "quiz": {
+          "questions": [
+            { "prompt": "ri_", "answer": "ng", "options": ["ng", "ck", "sh", "th"], "fullWord": "ring" },
+            { "prompt": "so_", "answer": "ng", "options": ["ck", "ng", "ch", "sh"], "fullWord": "song" },
+            { "prompt": "ki_", "answer": "ng", "options": ["ng", "ck", "th", "ch"], "fullWord": "king" },
+            { "prompt": "lo_", "answer": "ng", "options": ["ck", "sh", "ng", "th"], "fullWord": "long" },
+            { "prompt": "ba_", "answer": "ng", "options": ["ng", "ck", "sh", "ch"], "fullWord": "bang" },
+            { "prompt": "si_", "answer": "ng", "options": ["ck", "ng", "th", "sh"], "fullWord": "sing" }
+          ]
+        },
+        "dragdrop": {
+          "questions": [
+            { "prompt": "wi_", "answer": "ng", "distractors": ["ck", "sh"], "fullWord": "wing" },
+            { "prompt": "ri_", "answer": "ng", "distractors": ["ck", "th"], "fullWord": "ring" },
+            { "prompt": "so_", "answer": "ng", "distractors": ["ck", "ch"], "fullWord": "song" },
+            { "prompt": "ki_", "answer": "ng", "distractors": ["ck", "sh"], "fullWord": "king" },
+            { "prompt": "si_", "answer": "ng", "distractors": ["th", "ck"], "fullWord": "sing" }
+          ]
+        },
+        "speech": {
+          "words": ["ring", "song", "king", "sing", "wing"]
+        }
+      }
+    },
+    {
+      "id": "ph",
+      "blend": "ph",
+      "island": {
+        "name": "Photo Island",
+        "icon": "📸",
+        "color": "#1abc9c",
+        "background": "#e8f8f5"
+      },
+      "pronunciation": "ph as in phone",
+      "examples": ["phone", "photo", "phrase", "dolphin", "elephant", "alphabet", "trophy", "phantom"],
+      "stages": {
+        "listen": {
+          "words": [
+            { "word": "phone", "image": null },
+            { "word": "photo", "image": null },
+            { "word": "dolphin", "image": null },
+            { "word": "elephant", "image": null },
+            { "word": "trophy", "image": null }
+          ]
+        },
+        "quiz": {
+          "questions": [
+            { "prompt": "_one", "answer": "ph", "options": ["ph", "th", "sh", "ch"], "fullWord": "phone" },
+            { "prompt": "_oto", "answer": "ph", "options": ["ch", "ph", "wh", "sh"], "fullWord": "photo" },
+            { "prompt": "_rase", "answer": "ph", "options": ["ph", "th", "ch", "wh"], "fullWord": "phrase" },
+            { "prompt": "dol_in", "answer": "ph", "options": ["th", "sh", "ph", "ch"], "fullWord": "dolphin" },
+            { "prompt": "ele_ant", "answer": "ph", "options": ["ph", "th", "sh", "ch"], "fullWord": "elephant" },
+            { "prompt": "tro_y", "answer": "ph", "options": ["sh", "ph", "th", "ch"], "fullWord": "trophy" }
+          ]
+        },
+        "dragdrop": {
+          "questions": [
+            { "prompt": "_one", "answer": "ph", "distractors": ["th", "sh"], "fullWord": "phone" },
+            { "prompt": "_oto", "answer": "ph", "distractors": ["ch", "wh"], "fullWord": "photo" },
+            { "prompt": "dol_in", "answer": "ph", "distractors": ["th", "sh"], "fullWord": "dolphin" },
+            { "prompt": "ele_ant", "answer": "ph", "distractors": ["th", "ch"], "fullWord": "elephant" },
+            { "prompt": "tro_y", "answer": "ph", "distractors": ["sh", "th"], "fullWord": "trophy" }
+          ]
+        },
+        "speech": {
+          "words": ["phone", "photo", "dolphin", "elephant", "trophy"]
+        }
+      }
+    },
+    {
+      "id": "qu",
+      "blend": "qu",
+      "island": {
+        "name": "Quill Island",
+        "icon": "🪶",
+        "color": "#8e44ad",
+        "background": "#f5eef8"
+      },
+      "pronunciation": "qu as in queen",
+      "examples": ["queen", "quack", "quick", "quiet", "quiz", "quilt", "quarter", "question"],
+      "stages": {
+        "listen": {
+          "words": [
+            { "word": "queen", "image": null },
+            { "word": "quack", "image": null },
+            { "word": "quick", "image": null },
+            { "word": "quiet", "image": null },
+            { "word": "quilt", "image": null }
+          ]
+        },
+        "quiz": {
+          "questions": [
+            { "prompt": "_een", "answer": "qu", "options": ["qu", "wh", "ch", "th"], "fullWord": "queen" },
+            { "prompt": "_ack", "answer": "qu", "options": ["ch", "qu", "sh", "wh"], "fullWord": "quack" },
+            { "prompt": "_ick", "answer": "qu", "options": ["qu", "ch", "th", "wh"], "fullWord": "quick" },
+            { "prompt": "_iet", "answer": "qu", "options": ["wh", "th", "qu", "sh"], "fullWord": "quiet" },
+            { "prompt": "_iz", "answer": "qu", "options": ["qu", "wh", "ch", "ph"], "fullWord": "quiz" },
+            { "prompt": "_ilt", "answer": "qu", "options": ["wh", "qu", "th", "ch"], "fullWord": "quilt" }
+          ]
+        },
+        "dragdrop": {
+          "questions": [
+            { "prompt": "_een", "answer": "qu", "distractors": ["wh", "ch"], "fullWord": "queen" },
+            { "prompt": "_ack", "answer": "qu", "distractors": ["ch", "wh"], "fullWord": "quack" },
+            { "prompt": "_ick", "answer": "qu", "distractors": ["ch", "th"], "fullWord": "quick" },
+            { "prompt": "_iz", "answer": "qu", "distractors": ["wh", "ch"], "fullWord": "quiz" },
+            { "prompt": "_ilt", "answer": "qu", "distractors": ["wh", "th"], "fullWord": "quilt" }
+          ]
+        },
+        "speech": {
+          "words": ["queen", "quack", "quick", "quiet", "quiz"]
+        }
+      }
+    },
+    {
+      "id": "sh",
+      "blend": "sh",
+      "island": {
+        "name": "Shell Island",
+        "icon": "🐚",
+        "color": "#e67e22",
+        "background": "#fdf2e9"
+      },
+      "pronunciation": "sh as in ship",
+      "examples": ["ship", "shop", "shell", "fish", "push", "shoe", "sheep", "shower"],
+      "stages": {
+        "listen": {
+          "words": [
+            { "word": "ship", "image": "img/ship.png" },
+            { "word": "shop", "image": "img/shop.png" },
+            { "word": "fish", "image": "img/fish.png" },
+            { "word": "push", "image": "img/push.png" },
+            { "word": "shell", "image": null }
+          ]
+        },
+        "quiz": {
+          "questions": [
+            { "prompt": "_ip", "answer": "sh", "options": ["sh", "ch", "th", "wh"], "fullWord": "ship" },
+            { "prompt": "_op", "answer": "sh", "options": ["ch", "sh", "ph", "th"], "fullWord": "shop" },
+            { "prompt": "_ell", "answer": "sh", "options": ["sh", "ch", "wh", "th"], "fullWord": "shell" },
+            { "prompt": "fi_", "answer": "sh", "options": ["ch", "th", "sh", "ck"], "fullWord": "fish" },
+            { "prompt": "pu_", "answer": "sh", "options": ["sh", "ch", "th", "ck"], "fullWord": "push" },
+            { "prompt": "_oe", "answer": "sh", "options": ["th", "sh", "ch", "wh"], "fullWord": "shoe" }
+          ]
+        },
+        "dragdrop": {
+          "questions": [
+            { "prompt": "_eep", "answer": "sh", "distractors": ["ch", "th"], "fullWord": "sheep" },
+            { "prompt": "_ip", "answer": "sh", "distractors": ["ch", "wh"], "fullWord": "ship" },
+            { "prompt": "fi_", "answer": "sh", "distractors": ["th", "ck"], "fullWord": "fish" },
+            { "prompt": "_op", "answer": "sh", "distractors": ["ch", "th"], "fullWord": "shop" },
+            { "prompt": "_ell", "answer": "sh", "distractors": ["ch", "wh"], "fullWord": "shell" }
+          ]
+        },
+        "speech": {
+          "words": ["ship", "shop", "fish", "shell", "sheep"]
+        }
+      }
+    },
+    {
+      "id": "th",
+      "blend": "th",
+      "island": {
+        "name": "Thunder Island",
+        "icon": "⛈️",
+        "color": "#2c3e50",
+        "background": "#ebedef"
+      },
+      "pronunciation": "th as in think",
+      "examples": ["think", "thumb", "thick", "thin", "three", "throne", "path", "bath"],
+      "stages": {
+        "listen": {
+          "words": [
+            { "word": "think", "image": null },
+            { "word": "thumb", "image": null },
+            { "word": "three", "image": null },
+            { "word": "path", "image": null },
+            { "word": "bath", "image": null }
+          ]
+        },
+        "quiz": {
+          "questions": [
+            { "prompt": "_ink", "answer": "th", "options": ["th", "sh", "ch", "wh"], "fullWord": "think" },
+            { "prompt": "_umb", "answer": "th", "options": ["ch", "th", "sh", "ph"], "fullWord": "thumb" },
+            { "prompt": "_ick", "answer": "th", "options": ["th", "ch", "sh", "ck"], "fullWord": "thick" },
+            { "prompt": "_in", "answer": "th", "options": ["sh", "ch", "th", "wh"], "fullWord": "thin" },
+            { "prompt": "_ree", "answer": "th", "options": ["th", "sh", "ch", "ph"], "fullWord": "three" },
+            { "prompt": "pa_", "answer": "th", "options": ["sh", "th", "ch", "ck"], "fullWord": "path" }
+          ]
+        },
+        "dragdrop": {
+          "questions": [
+            { "prompt": "_rone", "answer": "th", "distractors": ["ch", "sh"], "fullWord": "throne" },
+            { "prompt": "ba_", "answer": "th", "distractors": ["sh", "ck"], "fullWord": "bath" },
+            { "prompt": "_ink", "answer": "th", "distractors": ["sh", "ch"], "fullWord": "think" },
+            { "prompt": "_ree", "answer": "th", "distractors": ["sh", "ch"], "fullWord": "three" },
+            { "prompt": "_in", "answer": "th", "distractors": ["sh", "ch"], "fullWord": "thin" }
+          ]
+        },
+        "speech": {
+          "words": ["think", "thumb", "three", "path", "bath"]
+        }
+      }
+    },
+    {
+      "id": "wh",
+      "blend": "wh",
+      "island": {
+        "name": "Whale Island",
+        "icon": "🐋",
+        "color": "#2980b9",
+        "background": "#ebf5fb"
+      },
+      "pronunciation": "wh as in whale",
+      "examples": ["whale", "wheel", "white", "whisper", "whistle", "where", "when", "why"],
+      "stages": {
+        "listen": {
+          "words": [
+            { "word": "whale", "image": null },
+            { "word": "wheel", "image": null },
+            { "word": "white", "image": null },
+            { "word": "whisper", "image": null },
+            { "word": "whistle", "image": null }
+          ]
+        },
+        "quiz": {
+          "questions": [
+            { "prompt": "_ale", "answer": "wh", "options": ["sh", "ch", "th", "wh"], "fullWord": "whale" },
+            { "prompt": "_eel", "answer": "wh", "options": ["wh", "sh", "ch", "th"], "fullWord": "wheel" },
+            { "prompt": "_ite", "answer": "wh", "options": ["th", "wh", "ch", "sh"], "fullWord": "white" },
+            { "prompt": "_isper", "answer": "wh", "options": ["wh", "ch", "sh", "th"], "fullWord": "whisper" },
+            { "prompt": "_istle", "answer": "wh", "options": ["sh", "ch", "wh", "th"], "fullWord": "whistle" },
+            { "prompt": "_ere", "answer": "wh", "options": ["wh", "th", "sh", "ch"], "fullWord": "where" }
+          ]
+        },
+        "dragdrop": {
+          "questions": [
+            { "prompt": "_ale", "answer": "wh", "distractors": ["sh", "th"], "fullWord": "whale" },
+            { "prompt": "_eel", "answer": "wh", "distractors": ["sh", "ch"], "fullWord": "wheel" },
+            { "prompt": "_ere", "answer": "wh", "distractors": ["th", "sh"], "fullWord": "where" },
+            { "prompt": "_en", "answer": "wh", "distractors": ["th", "ch"], "fullWord": "when" },
+            { "prompt": "_y", "answer": "wh", "distractors": ["sh", "th"], "fullWord": "why" }
+          ]
+        },
+        "speech": {
+          "words": ["whale", "wheel", "white", "where", "when"]
+        }
+      }
+    }
+  ]
+}

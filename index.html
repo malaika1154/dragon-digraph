@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dragon Digraph</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ========== WELCOME SCREEN ========== -->
+  <div id="screen-welcome" class="screen active">
+    <div class="welcome-wrapper">
+      <div class="logo-dragon">🐉</div>
+      <h1>Dragon Digraph</h1>
+      <p class="tagline">Master English Blends through Speech&nbsp;&amp;&nbsp;Play!</p>
+      <button class="btn btn-primary" id="btn-start">Start Adventure</button>
+    </div>
+  </div>
+
+  <!-- ========== AVATAR SELECT ========== -->
+  <div id="screen-avatar" class="screen">
+    <h2>Choose Your Dragon</h2>
+    <div id="avatar-list" class="avatar-list"></div>
+  </div>
+
+  <!-- ========== ISLAND MAP ========== -->
+  <div id="screen-map" class="screen">
+    <header class="topbar">
+      <span id="player-avatar-icon" class="topbar-avatar"></span>
+      <span id="player-name" class="topbar-name"></span>
+      <button class="btn btn-small" id="btn-dragons">🐉 My Dragons <span id="dragon-count">0</span></button>
+    </header>
+    <h2>Island Map</h2>
+    <p class="subtitle">Tap an island to begin!</p>
+    <div id="island-grid" class="island-grid"></div>
+  </div>
+
+  <!-- ========== STAGE SELECT ========== -->
+  <div id="screen-stages" class="screen">
+    <header class="topbar">
+      <button class="btn btn-small" id="btn-back-map">⬅ Map</button>
+      <h2 id="island-title" class="topbar-title"></h2>
+    </header>
+    <div id="stage-list" class="stage-list"></div>
+  </div>
+
+  <!-- ========== LISTEN & LEARN ========== -->
+  <div id="screen-listen" class="screen">
+    <header class="topbar">
+      <button class="btn btn-small btn-back-stages">⬅ Back</button>
+      <h2 class="topbar-title">🔊 Listen &amp; Learn</h2>
+    </header>
+    <div class="game-area">
+      <p id="listen-blend" class="big-blend"></p>
+      <p id="listen-pronunciation" class="pronunciation"></p>
+      <div id="listen-words" class="listen-words"></div>
+      <button class="btn btn-primary btn-back-stages" style="margin-top:1.5rem;">Done — Back to Stages</button>
+    </div>
+  </div>
+
+  <!-- ========== QUIZ ========== -->
+  <div id="screen-quiz" class="screen">
+    <header class="topbar">
+      <button class="btn btn-small btn-back-stages">⬅ Back</button>
+      <h2 class="topbar-title">❓ Blend Quiz</h2>
+    </header>
+    <div class="game-area">
+      <div id="quiz-progress" class="progress-bar"><div id="quiz-progress-fill" class="progress-fill"></div></div>
+      <p id="quiz-score" class="score-display"></p>
+      <p id="quiz-prompt" class="word-prompt"></p>
+      <div id="quiz-options" class="options-grid"></div>
+      <div id="quiz-feedback" class="feedback"></div>
+    </div>
+  </div>
+
+  <!-- ========== DRAG & DROP ========== -->
+  <div id="screen-dragdrop" class="screen">
+    <header class="topbar">
+      <button class="btn btn-small btn-back-stages">⬅ Back</button>
+      <h2 class="topbar-title">🎯 Drag &amp; Drop</h2>
+    </header>
+    <div class="game-area">
+      <div id="dd-progress" class="progress-bar"><div id="dd-progress-fill" class="progress-fill"></div></div>
+      <p id="dd-score" class="score-display"></p>
+      <p id="dd-prompt" class="word-prompt"></p>
+      <div id="dd-dropzone" class="dropzone" aria-label="Drop blend here">
+        <span id="dd-drop-text">Drop here</span>
+      </div>
+      <div id="dd-choices" class="dd-choices"></div>
+      <div id="dd-feedback" class="feedback"></div>
+    </div>
+  </div>
+
+  <!-- ========== SPEECH ========== -->
+  <div id="screen-speech" class="screen">
+    <header class="topbar">
+      <button class="btn btn-small btn-back-stages">⬅ Back</button>
+      <h2 class="topbar-title">🎤 Say It!</h2>
+    </header>
+    <div class="game-area">
+      <div id="sp-progress" class="progress-bar"><div id="sp-progress-fill" class="progress-fill"></div></div>
+      <p id="sp-score" class="score-display"></p>
+      <p id="sp-word" class="word-prompt big-word"></p>
+      <button class="btn btn-listen" id="btn-hear-word">🔊 Hear it</button>
+      <button class="btn btn-primary btn-speak" id="btn-speak">🎤 Tap to Speak</button>
+      <p id="sp-heard" class="heard-text"></p>
+      <div id="sp-feedback" class="feedback"></div>
+      <p id="sp-no-support" class="warning hidden">Speech recognition is not supported in this browser. Try Chrome on desktop or Android.</p>
+    </div>
+  </div>
+
+  <!-- ========== STAGE COMPLETE ========== -->
+  <div id="screen-complete" class="screen">
+    <div class="complete-wrapper">
+      <div id="complete-icon" class="complete-icon"></div>
+      <h2 id="complete-title"></h2>
+      <p id="complete-msg"></p>
+      <div id="complete-dragon" class="dragon-reward hidden">
+        <p class="dragon-earned-label">🎉 You earned a dragon! 🎉</p>
+        <div id="earned-dragon" class="earned-dragon"></div>
+      </div>
+      <button class="btn btn-primary" id="btn-continue">Continue</button>
+    </div>
+  </div>
+
+  <!-- ========== DRAGON COLLECTION ========== -->
+  <div id="screen-dragons" class="screen">
+    <header class="topbar">
+      <button class="btn btn-small" id="btn-back-map2">⬅ Map</button>
+      <h2 class="topbar-title">🐉 My Dragons</h2>
+    </header>
+    <div id="dragon-collection" class="dragon-collection"></div>
+  </div>
+
+  <script src="js/speech.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
