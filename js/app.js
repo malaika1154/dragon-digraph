@@ -5,13 +5,35 @@
 (async function () {
   'use strict';
 
+  /* ---- Click sound (Web Audio API) ---- */
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function playClick() {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.12);
+  }
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('button, .btn, .island-card, .avatar-card, .stage-card, .options-grid .btn, .dd-tile, .listen-word-card')) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      playClick();
+    }
+  });
+
   /* ---- Load data files ---- */
-  const [configRes, blendsRes] = await Promise.all([
+  const [configRes, digraphsRes] = await Promise.all([
     fetch('data/config.json'),
-    fetch('data/blends.json')
+    fetch('data/digraphs.json')
   ]);
   const CONFIG = await configRes.json();
-  const BLEND_DATA = (await blendsRes.json()).blends;
+  const DIGRAPH_DATA = (await digraphsRes.json()).digraphs;
 
   /* ---- Persistence helpers (localStorage) ---- */
   const SAVE_KEY = 'dragonDigraph_save';
@@ -30,9 +52,9 @@
   function getDefaultSave() {
     return {
       avatar: null,
-      // stageProgress[blendId][stageType] = { completed: bool, score: n }
+      // stageProgress[digraphId][stageType] = { completed: bool, score: n }
       stageProgress: {},
-      dragonsEarned: [] // blend ids with all 4 stages done
+      dragonsEarned: [] // digraph ids with all 4 stages done
     };
   }
 
@@ -58,6 +80,65 @@
     }
     return a;
   }
+
+  /* ---- Randomized feedback phrases ---- */
+  const CHEERS = [
+    '✅ Excellent!', '✅ Amazing!', '✅ Great job!', '✅ Wonderful!',
+    '✅ Superstar!', '✅ You rock!', '✅ Brilliant!', '✅ Awesome!',
+    '✅ Fantastic!', '✅ Well done!', '✅ Perfect!', '✅ Keep it up!'
+  ];
+  const TRIES = [
+    '❌ Try again!', '❌ Almost there!', '❌ Not quite — keep going!',
+    '❌ So close!', '❌ Don\'t give up!', '❌ You\'ll get it next time!'
+  ];
+  function randomCheer() { return CHEERS[Math.floor(Math.random() * CHEERS.length)]; }
+  function randomTry()   { return TRIES[Math.floor(Math.random() * TRIES.length)]; }
+
+  /* =============================================
+     TITLE / PLAY SCREEN
+     ============================================= */
+  /* ---- Background Music (YouTube IFrame API) ---- */
+  let ytPlayer = null;
+  let musicMuted = false;
+
+  // Load the YouTube IFrame API script
+  const ytScript = document.createElement('script');
+  ytScript.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(ytScript);
+
+  window.onYouTubeIframeAPIReady = function () {
+    ytPlayer = new YT.Player('yt-player', {
+      videoId: 'myZFE73HX28',
+      playerVars: { autoplay: 0, loop: 1, playlist: 'myZFE73HX28', controls: 0 },
+      events: {
+        onReady: function () { ytPlayer.setVolume(30); }
+      }
+    });
+  };
+
+  function startBgMusic() {
+    if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+      ytPlayer.playVideo();
+      document.getElementById('btn-music-toggle').style.display = 'block';
+    }
+  }
+
+  document.getElementById('btn-music-toggle').addEventListener('click', () => {
+    if (!ytPlayer) return;
+    if (musicMuted) {
+      ytPlayer.unMute();
+      document.getElementById('btn-music-toggle').textContent = '🔊';
+    } else {
+      ytPlayer.mute();
+      document.getElementById('btn-music-toggle').textContent = '🔇';
+    }
+    musicMuted = !musicMuted;
+  });
+
+  $('#btn-play').addEventListener('click', () => {
+    startBgMusic();
+    showScreen('welcome');
+  });
 
   /* =============================================
      WELCOME
@@ -105,12 +186,12 @@
   function isIslandUnlocked(index) {
     if (index === 0) return true;
     // Previous island must be fully complete
-    const prevBlend = BLEND_DATA[index - 1];
-    return save.dragonsEarned.includes(prevBlend.id);
+    const prevDigraph = DIGRAPH_DATA[index - 1];
+    return save.dragonsEarned.includes(prevDigraph.id);
   }
 
-  function isIslandComplete(blendId) {
-    return save.dragonsEarned.includes(blendId);
+  function isIslandComplete(digraphId) {
+    return save.dragonsEarned.includes(digraphId);
   }
 
   function renderMap() {
@@ -118,27 +199,43 @@
     $('#player-avatar-icon').textContent = av.emoji;
     $('#player-name').textContent = av.name;
     $('#dragon-count').textContent = save.dragonsEarned.length;
+    updateAnkiButton();
 
-    const grid = $('#island-grid');
-    grid.innerHTML = '';
+    const chain = $('#island-chain');
+    chain.innerHTML = '';
 
-    BLEND_DATA.forEach((blend, idx) => {
+    const sides = ['left', 'right'];          // zigzag pattern
+
+    DIGRAPH_DATA.forEach((dg, idx) => {
+      /* — connector chain between islands — */
+      if (idx > 0) {
+        const connector = document.createElement('div');
+        connector.className = 'chain-connector';
+        connector.innerHTML = '<div class="chain-link"></div><div class="chain-link"></div><div class="chain-link"></div>';
+        chain.appendChild(connector);
+      }
+
+      /* — island row (alternates left / right) — */
+      const row = document.createElement('div');
+      row.className = 'island-row ' + sides[idx % 2];
+
       const unlocked = isIslandUnlocked(idx);
-      const complete = isIslandComplete(blend.id);
+      const complete = isIslandComplete(dg.id);
       const card = document.createElement('div');
       card.className = 'island-card' + (unlocked ? '' : ' locked');
-      card.style.background = blend.island.background;
-      card.style.color = blend.island.color;
+      card.style.background = dg.island.background;
+      card.style.color = dg.island.color;
       card.innerHTML = `
-        <div class="icon">${blend.island.icon}</div>
-        <h3>${blend.island.name}</h3>
-        <div class="blend-label">${blend.blend}</div>
+        <div class="icon">${dg.island.icon}</div>
+        <h3>${dg.island.name}</h3>
+        <div class="blend-label">${dg.digraph}</div>
         ${complete ? '<span class="check-badge">✅</span>' : ''}
         ${!unlocked ? '<span class="lock-badge">🔒</span>' : ''}`;
       if (unlocked) {
-        card.addEventListener('click', () => openIsland(blend));
+        card.addEventListener('click', () => openIsland(dg));
       }
-      grid.appendChild(card);
+      row.appendChild(card);
+      chain.appendChild(row);
     });
   }
 
@@ -157,13 +254,13 @@
   function renderDragonCollection() {
     const container = $('#dragon-collection');
     container.innerHTML = '';
-    BLEND_DATA.forEach((blend) => {
-      const earned = save.dragonsEarned.includes(blend.id);
+    DIGRAPH_DATA.forEach((dg) => {
+      const earned = save.dragonsEarned.includes(dg.id);
       const cell = document.createElement('div');
       cell.className = 'dragon-cell' + (earned ? '' : ' empty');
       cell.innerHTML = `
-        <div class="dragon-emoji">${earned ? blend.island.icon : '❓'}</div>
-        <h4>${blend.island.name}</h4>
+        <div class="dragon-emoji">${earned ? dg.island.icon : '❓'}</div>
+        <h4>${dg.island.name}</h4>
         <p>${earned ? 'Earned!' : 'Locked'}</p>`;
       container.appendChild(cell);
     });
@@ -172,40 +269,40 @@
   /* =============================================
      STAGE SELECT for an island
      ============================================= */
-  let currentBlend = null;
+  let currentDigraph = null;
 
-  function getStageProgress(blendId, stageType) {
-    return (save.stageProgress[blendId] && save.stageProgress[blendId][stageType]) || null;
+  function getStageProgress(digraphId, stageType) {
+    return (save.stageProgress[digraphId] && save.stageProgress[digraphId][stageType]) || null;
   }
 
-  function isStageUnlocked(blendId, stageIdx) {
+  function isStageUnlocked(digraphId, stageIdx) {
     if (stageIdx === 0) return true;
     const prevType = CONFIG.stageTypes[stageIdx - 1].id;
-    const prev = getStageProgress(blendId, prevType);
+    const prev = getStageProgress(digraphId, prevType);
     return prev && prev.completed;
   }
 
-  function openIsland(blend) {
-    currentBlend = blend;
-    $('#island-title').textContent = `${blend.island.icon} ${blend.island.name}`;
+  function openIsland(dg) {
+    currentDigraph = dg;
+    $('#island-title').textContent = `${dg.island.icon} ${dg.island.name}`;
 
     const list = $('#stage-list');
     list.innerHTML = '';
 
     CONFIG.stageTypes.forEach((st, idx) => {
-      const prog = getStageProgress(blend.id, st.id);
-      const unlocked = isStageUnlocked(blend.id, idx);
+      const prog = getStageProgress(dg.id, st.id);
+      const unlocked = isStageUnlocked(dg.id, idx);
       const card = document.createElement('div');
       card.className = 'stage-card' + (unlocked ? '' : ' locked');
       card.innerHTML = `
-        <div class="stage-icon">${st.icon}</div>
+        <div class="stage-icon"><img src="${st.icon}" alt="${st.name}"></div>
         <div class="stage-info">
           <h3>${st.name}</h3>
           <p>${st.description}</p>
         </div>
         <div class="stage-status">${prog && prog.completed ? '✅' : unlocked ? '▶️' : '🔒'}</div>`;
       if (unlocked) {
-        card.addEventListener('click', () => launchStage(blend, st.id));
+        card.addEventListener('click', () => launchStage(dg, st.id));
       }
       list.appendChild(card);
     });
@@ -220,71 +317,72 @@
   // Back-to-stages buttons (multiple)
   document.addEventListener('click', (e) => {
     if (e.target.classList.contains('btn-back-stages')) {
-      if (currentBlend) openIsland(currentBlend);
+      if (currentDigraph) openIsland(currentDigraph);
     }
   });
 
   /* =============================================
      STAGE LAUNCHER
      ============================================= */
-  function launchStage(blend, stageType) {
-    currentBlend = blend;
+  function launchStage(dg, stageType) {
+    currentDigraph = dg;
     switch (stageType) {
-      case 'listen': startListen(blend); break;
-      case 'quiz': startQuiz(blend); break;
-      case 'dragdrop': startDragDrop(blend); break;
-      case 'speech': startSpeech(blend); break;
+      case 'learn': startLearn(dg); break;
+      case 'quiz': startQuiz(dg); break;
+      case 'dragdrop': startDragDrop(dg); break;
+      case 'speech': startSpeech(dg); break;
     }
   }
 
-  function markStageComplete(blendId, stageType, score) {
-    if (!save.stageProgress[blendId]) save.stageProgress[blendId] = {};
-    save.stageProgress[blendId][stageType] = { completed: true, score };
+  function markStageComplete(digraphId, stageType, score) {
+    if (!save.stageProgress[digraphId]) save.stageProgress[digraphId] = {};
+    save.stageProgress[digraphId][stageType] = { completed: true, score };
 
     // Check if all stages done → earn dragon
     const allDone = CONFIG.stageTypes.every((st) => {
-      const p = getStageProgress(blendId, st.id);
+      const p = getStageProgress(digraphId, st.id);
       return p && p.completed;
     });
-    if (allDone && !save.dragonsEarned.includes(blendId)) {
-      save.dragonsEarned.push(blendId);
+    if (allDone && !save.dragonsEarned.includes(digraphId)) {
+      save.dragonsEarned.push(digraphId);
     }
     writeSave(save);
-    return allDone && save.dragonsEarned.includes(blendId);
+    return allDone && save.dragonsEarned.includes(digraphId);
   }
 
   /* =============================================
-     LISTEN & LEARN
+     LEARN MODE
      ============================================= */
-  function startListen(blend) {
-    $('#listen-blend').textContent = blend.blend;
-    $('#listen-pronunciation').textContent = blend.pronunciation;
+  function startLearn(dg) {
+    $('#learn-digraph').textContent = dg.digraph;
+    $('#learn-pronunciation').textContent = dg.pronunciation;
 
-    const container = $('#listen-words');
+    const container = $('#learn-words');
     container.innerHTML = '';
 
-    blend.stages.listen.words.forEach((w) => {
+    dg.stages.learn.words.forEach((w) => {
       const card = document.createElement('div');
       card.className = 'listen-word-card';
       let inner = '';
       if (w.image) inner += `<img src="${encodeURI(w.image)}" alt="${w.word}">`;
-      inner += `<div class="word-label">${highlightBlend(w.word, blend.blend)}</div>`;
+      inner += `<div class="word-label">${highlightDigraph(w.word, dg.digraph)}</div>`;
+      inner += `<div class="speak-icon">🔊</div>`;
       card.innerHTML = inner;
       card.addEventListener('click', () => Speech.speak(w.word));
       container.appendChild(card);
     });
 
-    // Mark listen stage as complete immediately (it's informational)
-    markStageComplete(blend.id, 'listen', 0);
-    showScreen('listen');
+    // Mark learn stage as complete immediately (it's informational)
+    markStageComplete(dg.id, 'learn', 0);
+    showScreen('learn');
   }
 
-  function highlightBlend(word, blend) {
-    const idx = word.toLowerCase().indexOf(blend.toLowerCase());
+  function highlightDigraph(word, digraph) {
+    const idx = word.toLowerCase().indexOf(digraph.toLowerCase());
     if (idx === -1) return word;
     return word.substring(0, idx) +
-      `<strong style="color:var(--primary)">${word.substring(idx, idx + blend.length)}</strong>` +
-      word.substring(idx + blend.length);
+      `<strong style="color:var(--primary)">${word.substring(idx, idx + digraph.length)}</strong>` +
+      word.substring(idx + digraph.length);
   }
 
   /* =============================================
@@ -292,9 +390,9 @@
      ============================================= */
   let quizState = {};
 
-  function startQuiz(blend) {
-    const questions = shuffle(blend.stages.quiz.questions).slice(0, CONFIG.questionsPerStage);
-    quizState = { blend, questions, idx: 0, score: 0 };
+  function startQuiz(dg) {
+    const questions = shuffle(dg.stages.quiz.questions).slice(0, CONFIG.questionsPerStage);
+    quizState = { dg, questions, idx: 0, score: 0 };
     showQuizQuestion();
     showScreen('quiz');
   }
@@ -333,7 +431,7 @@
 
     if (correct) {
       quizState.score++;
-      $('#quiz-feedback').textContent = `✅ Correct! The word is "${question.fullWord}"`;
+      $('#quiz-feedback').textContent = `${randomCheer()} The word is "${question.fullWord}"`;
       $('#quiz-feedback').className = 'feedback correct';
       Speech.speak(question.fullWord);
     } else {
@@ -341,7 +439,7 @@
       $$('#quiz-options .option-btn').forEach((b) => {
         if (b.textContent === question.answer) b.classList.add('correct');
       });
-      $('#quiz-feedback').textContent = `❌ The answer was "${question.answer}" → "${question.fullWord}"`;
+      $('#quiz-feedback').textContent = `${randomTry()} The answer was "${question.answer}" → "${question.fullWord}"`;
       $('#quiz-feedback').className = 'feedback wrong';
     }
 
@@ -360,9 +458,9 @@
      ============================================= */
   let ddState = {};
 
-  function startDragDrop(blend) {
-    const questions = shuffle(blend.stages.dragdrop.questions).slice(0, CONFIG.questionsPerStage);
-    ddState = { blend, questions, idx: 0, score: 0 };
+  function startDragDrop(dg) {
+    const questions = shuffle(dg.stages.dragdrop.questions).slice(0, CONFIG.questionsPerStage);
+    ddState = { dg, questions, idx: 0, score: 0 };
     showDDQuestion();
     showScreen('dragdrop');
   }
@@ -377,6 +475,14 @@
     $('#dd-feedback').textContent = '';
     $('#dd-feedback').className = 'feedback';
     $('#dd-drop-text').textContent = 'Drop here';
+
+    // Show picture if available, otherwise show island emoji
+    const picEl = $('#dd-picture');
+    if (q.image) {
+      picEl.innerHTML = `<img src="${encodeURI(q.image)}" alt="${q.fullWord}">`;
+    } else {
+      picEl.innerHTML = `<span class="dd-picture-emoji">${ddState.dg.island.icon}</span>`;
+    }
 
     const choices = $('#dd-choices');
     choices.innerHTML = '';
@@ -426,11 +532,11 @@
     if (correct) {
       ddState.score++;
       $('#dd-drop-text').textContent = question.answer;
-      $('#dd-feedback').textContent = `✅ Correct! "${question.fullWord}"`;
+      $('#dd-feedback').textContent = `${randomCheer()} "${question.fullWord}"`;
       $('#dd-feedback').className = 'feedback correct';
       Speech.speak(question.fullWord);
     } else {
-      $('#dd-feedback').textContent = `❌ The answer was "${question.answer}" → "${question.fullWord}"`;
+      $('#dd-feedback').textContent = `${randomTry()} The answer was "${question.answer}" → "${question.fullWord}"`;
       $('#dd-feedback').className = 'feedback wrong';
     }
 
@@ -449,9 +555,9 @@
      ============================================= */
   let spState = {};
 
-  function startSpeech(blend) {
-    const words = shuffle(blend.stages.speech.words).slice(0, CONFIG.questionsPerStage);
-    spState = { blend, words, idx: 0, score: 0 };
+  function startSpeech(dg) {
+    const words = shuffle(dg.stages.speech.words).slice(0, CONFIG.questionsPerStage);
+    spState = { dg, words, idx: 0, score: 0 };
 
     if (!Speech.isRecognitionSupported()) {
       $('#sp-no-support').classList.remove('hidden');
@@ -485,9 +591,20 @@
   $('#btn-speak').addEventListener('click', async () => {
     if (!Speech.isRecognitionSupported()) return;
     const btn = $('#btn-speak');
+
+    // Request mic permission first
+    const micOk = await Speech.requestMic();
+    if (!micOk) {
+      $('#sp-feedback').textContent = '🎤 Microphone access denied — please allow microphone in your browser.';
+      $('#sp-feedback').className = 'feedback wrong';
+      return;
+    }
+
     btn.classList.add('recording');
     btn.disabled = true;
     $('#sp-heard').textContent = 'Listening...';
+    $('#sp-feedback').textContent = '';
+    $('#sp-feedback').className = 'feedback';
 
     try {
       const result = await Speech.listen();
@@ -502,17 +619,22 @@
 
       if (correct) {
         spState.score++;
-        $('#sp-feedback').textContent = '✅ Great job!';
+        $('#sp-feedback').textContent = randomCheer();
         $('#sp-feedback').className = 'feedback correct';
       } else {
-        $('#sp-feedback').textContent = `❌ Try again! The word is "${target}"`;
+        $('#sp-feedback').textContent = `${randomTry()} The word is "${target}"`;
         $('#sp-feedback').className = 'feedback wrong';
       }
     } catch {
       btn.classList.remove('recording');
-      $('#sp-heard').textContent = 'Could not hear you — try again!';
+      btn.disabled = false;
+      $('#sp-heard').textContent = '';
+      $('#sp-feedback').textContent = '🎤 Could not hear you — tap to try again!';
+      $('#sp-feedback').className = 'feedback wrong';
+      return;  // let user retry without advancing
     }
 
+    btn.disabled = false;
     setTimeout(() => {
       spState.idx++;
       if (spState.idx < spState.words.length) {
@@ -528,7 +650,7 @@
      ============================================= */
   function finishStage(stageType, score, total) {
     const passed = score >= CONFIG.passThreshold;
-    const earnedDragon = passed ? markStageComplete(currentBlend.id, stageType, score) : false;
+    const earnedDragon = passed ? markStageComplete(currentDigraph.id, stageType, score) : false;
 
     if (passed) {
       $('#complete-icon').textContent = '🎉';
@@ -542,7 +664,7 @@
 
     if (earnedDragon) {
       $('#complete-dragon').classList.remove('hidden');
-      $('#earned-dragon').textContent = currentBlend.island.icon + ' 🐉';
+      $('#earned-dragon').textContent = currentDigraph.island.icon + ' 🐉';
     } else {
       $('#complete-dragon').classList.add('hidden');
     }
@@ -551,8 +673,8 @@
   }
 
   $('#btn-continue').addEventListener('click', () => {
-    if (currentBlend) {
-      openIsland(currentBlend);
+    if (currentDigraph) {
+      openIsland(currentDigraph);
     } else {
       renderMap();
       showScreen('map');
@@ -560,12 +682,172 @@
   });
 
   /* =============================================
-     INIT — restore session on reload
+     ANKI CARD REVIEW (unlocks after all dragons earned)
      ============================================= */
-  if (save.avatar) {
-    renderMap();
-    showScreen('map');
-  } else {
-    showScreen('welcome');
+  let ankiDeck = [];
+  let ankiIndex = 0;
+  let ankiCorrect = 0;
+  let ankiTotal = 0;
+
+  function isAnkiUnlocked() {
+    return save.dragonsEarned.length >= DIGRAPH_DATA.length;
   }
+
+  function updateAnkiButton() {
+    const btn = $('#btn-anki');
+    if (isAnkiUnlocked()) {
+      btn.classList.remove('hidden');
+    } else {
+      btn.classList.add('hidden');
+    }
+  }
+
+  function buildAnkiDeck() {
+    const cards = [];
+    DIGRAPH_DATA.forEach((dg) => {
+      dg.stages.quiz.questions.forEach((q) => {
+        cards.push({
+          prompt: q.prompt,
+          answer: q.answer,
+          options: shuffle([...q.options]),
+          fullWord: q.fullWord,
+          image: q.image,
+          digraph: dg.digraph,
+          weight: 1  // higher = more likely to reappear
+        });
+      });
+    });
+    return shuffle(cards);
+  }
+
+  function pickNextAnkiCard() {
+    // Weighted pick — hard cards appear more often
+    const pool = [];
+    ankiDeck.forEach((c, i) => {
+      for (let w = 0; w < c.weight; w++) pool.push(i);
+    });
+    if (pool.length === 0) return -1;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  function startAnki() {
+    ankiDeck = buildAnkiDeck();
+    ankiIndex = 0;
+    ankiCorrect = 0;
+    ankiTotal = 0;
+    $('#anki-done').classList.add('hidden');
+    showAnkiCard();
+    showScreen('anki');
+  }
+
+  function showAnkiCard() {
+    const idx = pickNextAnkiCard();
+    if (idx === -1 || ankiTotal >= 20) {
+      finishAnki();
+      return;
+    }
+    ankiIndex = idx;
+    const card = ankiDeck[idx];
+
+    $('#anki-counter').textContent = `Card ${ankiTotal + 1} / 20`;
+    $('#anki-card').querySelector('.anki-front').classList.remove('hidden');
+    $('#anki-card').querySelector('.anki-back').classList.add('hidden');
+    $('#anki-btns').classList.add('hidden');
+    $('#anki-feedback').textContent = '';
+
+    // Image
+    const imgDiv = $('#anki-image');
+    if (card.image) {
+      imgDiv.innerHTML = `<img src="${card.image}" alt="${card.fullWord}">`;
+    } else {
+      imgDiv.innerHTML = '';
+    }
+
+    // Prompt
+    $('#anki-prompt').textContent = card.prompt;
+
+    // Options
+    const grid = $('#anki-options');
+    grid.innerHTML = '';
+    card.options.forEach((opt) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-primary';
+      btn.textContent = opt;
+      btn.addEventListener('click', () => handleAnkiAnswer(opt));
+      grid.appendChild(btn);
+    });
+  }
+
+  function handleAnkiAnswer(chosen) {
+    const card = ankiDeck[ankiIndex];
+    const correct = chosen === card.answer;
+    ankiTotal++;
+
+    // Disable option buttons
+    $$('#anki-options .btn').forEach((b) => {
+      b.disabled = true;
+      if (b.textContent === card.answer) b.style.background = 'var(--success)';
+      if (b.textContent === chosen && !correct) b.style.background = 'var(--danger)';
+    });
+
+    if (correct) {
+      ankiCorrect++;
+      $('#anki-feedback').textContent = '✅ Correct!';
+      $('#anki-feedback').style.color = 'var(--success)';
+    } else {
+      $('#anki-feedback').textContent = `❌ It was "${card.answer}"`;
+      $('#anki-feedback').style.color = 'var(--danger)';
+    }
+
+    // Flip to back
+    const frontEl = $('#anki-card').querySelector('.anki-front');
+    const backEl = $('#anki-card').querySelector('.anki-back');
+    setTimeout(() => {
+      frontEl.classList.add('hidden');
+      backEl.classList.remove('hidden');
+      $('#anki-answer-word').textContent = card.fullWord;
+      $('#anki-answer-digraph').textContent = card.digraph;
+      $('#anki-btns').classList.remove('hidden');
+      if (typeof SpeechHelper !== 'undefined') SpeechHelper.speak(card.fullWord);
+    }, 800);
+  }
+
+  // Hear button
+  $('#btn-anki-hear').addEventListener('click', () => {
+    const card = ankiDeck[ankiIndex];
+    if (typeof SpeechHelper !== 'undefined') SpeechHelper.speak(card.fullWord);
+  });
+
+  // Easy — reduce card weight (less repetition)
+  $('#btn-anki-easy').addEventListener('click', () => {
+    ankiDeck[ankiIndex].weight = Math.max(0, ankiDeck[ankiIndex].weight - 1);
+    showAnkiCard();
+  });
+
+  // Hard — increase card weight (more repetition)
+  $('#btn-anki-hard').addEventListener('click', () => {
+    ankiDeck[ankiIndex].weight += 2;
+    showAnkiCard();
+  });
+
+  function finishAnki() {
+    $('#anki-card').querySelector('.anki-front').classList.add('hidden');
+    $('#anki-card').querySelector('.anki-back').classList.add('hidden');
+    $('#anki-btns').classList.add('hidden');
+    $('#anki-feedback').textContent = '';
+    $('#anki-counter').textContent = '';
+    $('#anki-done').classList.remove('hidden');
+    $('#anki-summary').textContent = `You got ${ankiCorrect} out of ${ankiTotal} correct!`;
+  }
+
+  $('#btn-anki').addEventListener('click', () => startAnki());
+  $('#btn-anki-restart').addEventListener('click', () => startAnki());
+  $('#btn-anki-back').addEventListener('click', () => { renderMap(); showScreen('map'); });
+  $('#btn-back-map3').addEventListener('click', () => { renderMap(); showScreen('map'); });
+
+  /* =============================================
+     INIT — always start on the title screen
+     ============================================= */
+  // Title screen is shown by default via the 'active' class in HTML.
+  // The user must click "Play" to proceed.
 })();

@@ -8,12 +8,47 @@
 </head>
 <body>
 
+  <!-- ========== TITLE / PLAY SCREEN ========== -->
+  <div id="screen-title" class="screen active">
+    <div class="title-bg">
+      <svg class="title-dragon-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <!-- Magical open book with sparkles -->
+        <ellipse cx="200" cy="355" rx="130" ry="16" fill="rgba(0,0,0,.08)"/>
+        <!-- Book body -->
+        <rect x="90" y="180" width="220" height="160" rx="12" fill="#6c5ce7"/>
+        <rect x="95" y="185" width="105" height="150" rx="8" fill="#f8f9fa"/>
+        <rect x="200" y="185" width="105" height="150" rx="8" fill="#f1f0ff"/>
+        <!-- Book spine -->
+        <rect x="196" y="178" width="8" height="164" rx="4" fill="#4a3fb5"/>
+        <!-- Text lines on left page -->
+        <rect x="110" y="205" width="70" height="5" rx="2" fill="#a29bfe" opacity=".5"/>
+        <rect x="110" y="220" width="60" height="5" rx="2" fill="#a29bfe" opacity=".4"/>
+        <rect x="110" y="235" width="65" height="5" rx="2" fill="#a29bfe" opacity=".3"/>
+        <!-- Letters on right page -->
+        <text x="240" y="230" font-size="32" font-weight="bold" fill="#6c5ce7" text-anchor="middle" font-family="sans-serif">sh</text>
+        <text x="240" y="270" font-size="32" font-weight="bold" fill="#e17055" text-anchor="middle" font-family="sans-serif">ch</text>
+        <text x="240" y="310" font-size="32" font-weight="bold" fill="#00b894" text-anchor="middle" font-family="sans-serif">th</text>
+        <!-- Sparkles -->
+        <circle cx="130" cy="155" r="6" fill="#fdcb6e"><animate attributeName="opacity" values="1;.3;1" dur="1.5s" repeatCount="indefinite"/></circle>
+        <circle cx="270" cy="145" r="5" fill="#fd79a8"><animate attributeName="opacity" values=".3;1;.3" dur="1.8s" repeatCount="indefinite"/></circle>
+        <circle cx="200" cy="130" r="7" fill="#00b894"><animate attributeName="opacity" values="1;.4;1" dur="1.3s" repeatCount="indefinite"/></circle>
+        <circle cx="160" cy="140" r="4" fill="#a29bfe"><animate attributeName="opacity" values=".5;1;.5" dur="2s" repeatCount="indefinite"/></circle>
+        <circle cx="240" cy="160" r="5" fill="#fdcb6e"><animate attributeName="opacity" values="1;.2;1" dur="1.6s" repeatCount="indefinite"/></circle>
+        <!-- Stars -->
+        <polygon points="320,170 324,180 335,180 326,187 329,198 320,191 311,198 314,187 305,180 316,180" fill="#fdcb6e" opacity=".8"><animate attributeName="opacity" values=".8;.3;.8" dur="2s" repeatCount="indefinite"/></polygon>
+        <polygon points="80,165 83,173 91,173 85,178 87,186 80,181 73,186 75,178 69,173 77,173" fill="#fd79a8" opacity=".7"><animate attributeName="opacity" values=".4;.9;.4" dur="1.7s" repeatCount="indefinite"/></polygon>
+      </svg>
+      <h1 class="title-name">Dragon Digraph</h1>
+      <button class="btn btn-play" id="btn-play">&#9654; Play</button>
+    </div>
+  </div>
+
   <!-- ========== WELCOME SCREEN ========== -->
-  <div id="screen-welcome" class="screen active">
+  <div id="screen-welcome" class="screen">
     <div class="welcome-wrapper">
-      <div class="logo-dragon">🐉</div>
+      <div class="logo-dragon">✨📖✨</div>
       <h1>Dragon Digraph</h1>
-      <p class="tagline">Master English Blends through Speech&nbsp;&amp;&nbsp;Play!</p>
+      <p class="tagline">Master Consonant Digraphs through Speech&nbsp;&amp;&nbsp;Play!</p>
       <button class="btn btn-primary" id="btn-start">Start Adventure</button>
     </div>
   </div>
@@ -30,10 +65,11 @@
       <span id="player-avatar-icon" class="topbar-avatar"></span>
       <span id="player-name" class="topbar-name"></span>
       <button class="btn btn-small" id="btn-dragons">🐉 My Dragons <span id="dragon-count">0</span></button>
+      <button class="btn btn-small hidden" id="btn-anki">🃏 Anki Review</button>
     </header>
     <h2>Island Map</h2>
     <p class="subtitle">Tap an island to begin!</p>
-    <div id="island-grid" class="island-grid"></div>
+    <div id="island-chain" class="island-chain"></div>
   </div>
 
   <!-- ========== STAGE SELECT ========== -->
@@ -45,16 +81,16 @@
     <div id="stage-list" class="stage-list"></div>
   </div>
 
-  <!-- ========== LISTEN & LEARN ========== -->
-  <div id="screen-listen" class="screen">
+  <!-- ========== LEARN MODE ========== -->
+  <div id="screen-learn" class="screen">
     <header class="topbar">
       <button class="btn btn-small btn-back-stages">⬅ Back</button>
-      <h2 class="topbar-title">🔊 Listen &amp; Learn</h2>
+      <h2 class="topbar-title"><img src="img/learn.png" alt="Learn" class="topbar-icon"> Learn</h2>
     </header>
     <div class="game-area">
-      <p id="listen-blend" class="big-blend"></p>
-      <p id="listen-pronunciation" class="pronunciation"></p>
-      <div id="listen-words" class="listen-words"></div>
+      <p id="learn-digraph" class="big-blend"></p>
+      <p id="learn-pronunciation" class="pronunciation"></p>
+      <div id="learn-words" class="listen-words"></div>
       <button class="btn btn-primary btn-back-stages" style="margin-top:1.5rem;">Done — Back to Stages</button>
     </div>
   </div>
@@ -63,7 +99,7 @@
   <div id="screen-quiz" class="screen">
     <header class="topbar">
       <button class="btn btn-small btn-back-stages">⬅ Back</button>
-      <h2 class="topbar-title">❓ Blend Quiz</h2>
+      <h2 class="topbar-title"><img src="img/quiz .png" alt="Digraph Quiz" class="topbar-icon"> Digraph Quiz</h2>
     </header>
     <div class="game-area">
       <div id="quiz-progress" class="progress-bar"><div id="quiz-progress-fill" class="progress-fill"></div></div>
@@ -78,14 +114,19 @@
   <div id="screen-dragdrop" class="screen">
     <header class="topbar">
       <button class="btn btn-small btn-back-stages">⬅ Back</button>
-      <h2 class="topbar-title">🎯 Drag &amp; Drop</h2>
+      <h2 class="topbar-title"><img src="img/drag and drop.png" alt="Drag &amp; Drop" class="topbar-icon"> Drag &amp; Drop</h2>
     </header>
     <div class="game-area">
       <div id="dd-progress" class="progress-bar"><div id="dd-progress-fill" class="progress-fill"></div></div>
       <p id="dd-score" class="score-display"></p>
-      <p id="dd-prompt" class="word-prompt"></p>
-      <div id="dd-dropzone" class="dropzone" aria-label="Drop blend here">
-        <span id="dd-drop-text">Drop here</span>
+      <div class="dd-picture-word-row">
+        <div id="dd-picture" class="dd-picture"></div>
+        <div class="dd-word-drop">
+          <p id="dd-prompt" class="word-prompt"></p>
+          <div id="dd-dropzone" class="dropzone" aria-label="Drop digraph here">
+            <span id="dd-drop-text">Drop here</span>
+          </div>
+        </div>
       </div>
       <div id="dd-choices" class="dd-choices"></div>
       <div id="dd-feedback" class="feedback"></div>
@@ -96,7 +137,7 @@
   <div id="screen-speech" class="screen">
     <header class="topbar">
       <button class="btn btn-small btn-back-stages">⬅ Back</button>
-      <h2 class="topbar-title">🎤 Say It!</h2>
+      <h2 class="topbar-title"><img src="img/say it .png" alt="Say It!" class="topbar-icon"> Say It!</h2>
     </header>
     <div class="game-area">
       <div id="sp-progress" class="progress-bar"><div id="sp-progress-fill" class="progress-fill"></div></div>
@@ -132,6 +173,48 @@
     </header>
     <div id="dragon-collection" class="dragon-collection"></div>
   </div>
+
+  <!-- ========== ANKI CARD REVIEW ========== -->
+  <div id="screen-anki" class="screen">
+    <header class="topbar">
+      <button class="btn btn-small" id="btn-back-map3">⬅ Map</button>
+      <h2 class="topbar-title">🃏 Anki Review</h2>
+    </header>
+    <div class="game-area">
+      <p id="anki-counter" class="score-display"></p>
+      <div id="anki-card" class="anki-card">
+        <div class="anki-front">
+          <div id="anki-image" class="anki-image"></div>
+          <p id="anki-prompt" class="word-prompt"></p>
+          <div id="anki-options" class="options-grid"></div>
+        </div>
+        <div class="anki-back hidden">
+          <p id="anki-answer-word" class="word-prompt" style="color:var(--success)"></p>
+          <p id="anki-answer-digraph" class="big-blend"></p>
+          <button class="btn btn-listen" id="btn-anki-hear">🔊 Hear it</button>
+        </div>
+      </div>
+      <div id="anki-feedback" class="feedback"></div>
+      <div id="anki-btns" class="anki-btns hidden">
+        <button class="btn btn-danger" id="btn-anki-hard">❌ Hard</button>
+        <button class="btn btn-primary" id="btn-anki-easy">✅ Easy</button>
+      </div>
+      <div id="anki-done" class="hidden" style="margin-top:1.5rem;">
+        <h2>🎉 Review Complete!</h2>
+        <p id="anki-summary"></p>
+        <button class="btn btn-primary" id="btn-anki-restart">Review Again</button>
+        <button class="btn btn-small" id="btn-anki-back" style="margin-top:.5rem;">Back to Map</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden YouTube player for background music -->
+  <div id="yt-player-wrap" style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;">
+    <div id="yt-player"></div>
+  </div>
+
+  <!-- Mute / Unmute toggle -->
+  <button id="btn-music-toggle" class="btn-music-toggle" title="Toggle music">🔊</button>
 
   <script src="js/speech.js"></script>
   <script src="js/app.js"></script>

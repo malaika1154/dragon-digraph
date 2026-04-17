@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Thought bubble style "so much!" -->
+  <circle cx="100" cy="80" r="65" fill="#FFE066" stroke="#F4C430" stroke-width="3"/>
+  <!-- Stacked items suggesting "a lot" -->
+  <rect x="60" y="55" width="30" height="20" rx="4" fill="#e74c3c"/>
+  <rect x="75" y="40" width="30" height="20" rx="4" fill="#3498db"/>
+  <rect x="90" y="55" width="30" height="20" rx="4" fill="#2ecc71"/>
+  <rect x="70" y="75" width="30" height="20" rx="4" fill="#9b59b6"/>
+  <rect x="95" y="75" width="30" height="20" rx="4" fill="#e67e22"/>
+  <!-- Exclamation -->
+  <text x="100" y="120" text-anchor="middle" font-family="sans-serif" font-size="26" font-weight="bold" fill="#e74c3c">!</text>
+  <!-- Label -->
+  <text x="100" y="175" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="bold" fill="#333">so much!</text>
+</svg>

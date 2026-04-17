@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Sock -->
+  <!-- Leg part -->
+  <rect x="70" y="20" width="50" height="90" rx="20" fill="#3498db" stroke="#2471A3" stroke-width="3"/>
+  <!-- Foot part -->
+  <path d="M 70 110 Q 70 160 100 165 Q 150 170 155 130 Q 155 110 120 110 Z" fill="#3498db" stroke="#2471A3" stroke-width="3"/>
+  <!-- Cuff -->
+  <rect x="65" y="20" width="60" height="20" rx="8" fill="#E8DAEF" stroke="#AF7AC5" stroke-width="2"/>
+  <!-- Stripes -->
+  <line x1="72" y1="60" x2="118" y2="60" stroke="#2471A3" stroke-width="3"/>
+  <line x1="72" y1="75" x2="118" y2="75" stroke="#2471A3" stroke-width="3"/>
+  <!-- Toe detail -->
+  <path d="M 100 165 Q 130 165 145 145" fill="none" stroke="#2471A3" stroke-width="2" stroke-dasharray="4,4"/>
+</svg>

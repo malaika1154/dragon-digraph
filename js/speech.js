@@ -28,6 +28,20 @@ const Speech = (() => {
   }
 
   /**
+   * Request microphone permission explicitly.
+   * Returns true if granted, false otherwise.
+   */
+  async function requestMic() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(t => t.stop()); // release immediately
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
    * Listen for speech and return the transcript.
    * Resolves with { transcript, confidence } or rejects on error/no-speech.
    */
@@ -36,22 +50,53 @@ const Speech = (() => {
       if (!SpeechRec) {
         return reject(new Error('Speech recognition not supported'));
       }
+      // Stop any TTS that might interfere
+      synth.cancel();
+      // Stop any previous recognition
+      if (recognition) {
+        try { recognition.abort(); } catch (_) { /* ignore */ }
+      }
       recognition = new SpeechRec();
       recognition.lang = 'en-US';
       recognition.interimResults = false;
-      recognition.maxAlternatives = 3;
+      recognition.maxAlternatives = 5;
+      recognition.continuous = false;
+
+      let settled = false;
 
       recognition.onresult = (event) => {
+        if (settled) return;
+        settled = true;
         const best = event.results[0][0];
         resolve({
           transcript: best.transcript.toLowerCase().trim(),
           confidence: best.confidence
         });
       };
-      recognition.onerror = (e) => reject(e);
-      recognition.onnomatch = () => reject(new Error('no-match'));
-      recognition.onend = () => {}; // handled by result/error
-      recognition.start();
+      recognition.onerror = (e) => {
+        if (settled) return;
+        settled = true;
+        reject(e);
+      };
+      recognition.onnomatch = () => {
+        if (settled) return;
+        settled = true;
+        reject(new Error('no-match'));
+      };
+      recognition.onend = () => {
+        if (!settled) {
+          settled = true;
+          reject(new Error('no-speech'));
+        }
+      };
+      try {
+        recognition.start();
+      } catch (err) {
+        if (!settled) {
+          settled = true;
+          reject(err);
+        }
+      }
     });
   }
 
@@ -61,5 +106,5 @@ const Speech = (() => {
     }
   }
 
-  return { speak, listen, stopListening, isRecognitionSupported };
+  return { speak, listen, stopListening, isRecognitionSupported, requestMic };
 })();

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Cutting board -->
+  <rect x="30" y="110" width="140" height="20" rx="4" fill="#D2B48C" stroke="#8B7355" stroke-width="2"/>
+  <!-- Carrot / vegetable -->
+  <ellipse cx="100" cy="105" rx="50" ry="15" fill="#FF8C00" stroke="#CC7000" stroke-width="2"/>
+  <rect x="80" y="90" width="40" height="15" fill="#FF8C00" stroke="#CC7000" stroke-width="2"/>
+  <!-- Knife -->
+  <rect x="110" y="40" width="6" height="55" rx="2" fill="#888" stroke="#666" stroke-width="1"/>
+  <rect x="106" y="30" width="14" height="15" rx="3" fill="#654321" stroke="#4A3010" stroke-width="1"/>
+  <!-- Chop lines -->
+  <line x1="90" y1="90" x2="90" y2="118" stroke="#CC7000" stroke-width="2" stroke-dasharray="3,3"/>
+  <!-- Stars for action -->
+  <text x="140" y="60" font-size="20">✨</text>
+  <text x="55" y="55" font-size="16">✨</text>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Person from behind (back) -->
+  <!-- Head -->
+  <circle cx="100" cy="50" r="25" fill="#FFDBB4" stroke="#D4A574" stroke-width="2"/>
+  <!-- Hair -->
+  <path d="M 75 45 Q 80 25 100 22 Q 120 25 125 45" fill="#5D4037" stroke="#4E342E" stroke-width="2"/>
+  <!-- Body (from behind - shirt) -->
+  <rect x="70" y="75" width="60" height="70" rx="8" fill="#3498db" stroke="#2471A3" stroke-width="2"/>
+  <!-- Arms -->
+  <rect x="50" y="78" width="20" height="50" rx="8" fill="#3498db" stroke="#2471A3" stroke-width="2"/>
+  <rect x="130" y="78" width="20" height="50" rx="8" fill="#3498db" stroke="#2471A3" stroke-width="2"/>
+  <!-- Arrow pointing at back -->
+  <line x1="165" y1="110" x2="138" y2="110" stroke="#e74c3c" stroke-width="4" marker-end="url(#arb)"/>
+  <defs><marker id="arb" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#e74c3c"/></marker></defs>
+  <!-- Legs -->
+  <rect x="75" y="145" width="20" height="40" rx="6" fill="#2C3E50"/>
+  <rect x="105" y="145" width="20" height="40" rx="6" fill="#2C3E50"/>
+</svg>

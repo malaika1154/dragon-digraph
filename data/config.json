@@ -1,6 +1,6 @@
 {
   "appName": "Dragon Digraph",
-  "appTagline": "Master English Blends through Speech and Play!",
+  "appTagline": "Master Consonant Digraphs through Speech and Play!",
   "targetAge": "4–9",
   "avatars": [
     {
@@ -27,30 +27,30 @@
   ],
   "stageTypes": [
     {
-      "id": "listen",
-      "name": "Listen & Learn",
-      "icon": "🔊",
-      "description": "Hear the blend and learn example words"
+      "id": "learn",
+      "name": "Learn",
+      "icon": "img/learn.png",
+      "description": "See pictures, hear the digraph and example words"
     },
     {
       "id": "quiz",
-      "name": "Blend Quiz",
-      "icon": "❓",
-      "description": "Pick the right blend to complete each word"
+      "name": "Digraph Quiz",
+      "icon": "img/quiz .png",
+      "description": "Pick the right digraph to complete each word"
     },
     {
       "id": "dragdrop",
       "name": "Drag & Drop",
-      "icon": "🎯",
-      "description": "Drag the correct blend into the word"
+      "icon": "img/drag and drop.png",
+      "description": "Drag the correct digraph into the blank next to the picture"
     },
     {
       "id": "speech",
       "name": "Say It!",
-      "icon": "🎤",
-      "description": "Say the blend and word out loud"
+      "icon": "img/say it .png",
+      "description": "Say the digraph and word out loud"
     }
   ],
   "passThreshold": 3,
-  "questionsPerStage": 5
+  "questionsPerStage": 4
 }

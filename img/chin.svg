@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Simple face showing chin -->
+  <circle cx="100" cy="90" r="70" fill="#FFDBB4" stroke="#D4A574" stroke-width="3"/>
+  <!-- Eyes -->
+  <circle cx="78" cy="75" r="7" fill="#333"/>
+  <circle cx="122" cy="75" r="7" fill="#333"/>
+  <!-- Smile -->
+  <path d="M 78 100 Q 100 125 122 100" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+  <!-- Arrow pointing to chin -->
+  <line x1="100" y1="170" x2="100" y2="145" stroke="#e74c3c" stroke-width="4" marker-end="url(#arr)"/>
+  <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#e74c3c"/></marker></defs>
+  <text x="100" y="193" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="bold" fill="#e74c3c">chin</text>
+</svg>

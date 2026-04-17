@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Question mark bubble for "what?" -->
+  <circle cx="100" cy="85" r="65" fill="#EBF5FB" stroke="#2980b9" stroke-width="3"/>
+  <text x="100" y="110" text-anchor="middle" font-family="sans-serif" font-size="80" font-weight="bold" fill="#2980b9">?</text>
+  <!-- Small thinking dots -->
+  <circle cx="70" cy="158" r="8" fill="#AED6F1"/>
+  <circle cx="55" cy="175" r="5" fill="#AED6F1"/>
+</svg>

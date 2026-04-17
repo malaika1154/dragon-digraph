@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Map / location for "where" -->
+  <!-- Map background -->
+  <rect x="30" y="30" width="140" height="110" rx="10" fill="#D5F5E3" stroke="#27ae60" stroke-width="3"/>
+  <!-- Roads -->
+  <line x1="30" y1="85" x2="170" y2="85" stroke="#BDC3C7" stroke-width="6"/>
+  <line x1="100" y1="30" x2="100" y2="140" stroke="#BDC3C7" stroke-width="6"/>
+  <!-- Location pin -->
+  <ellipse cx="130" cy="65" rx="16" ry="20" fill="#e74c3c"/>
+  <circle cx="130" cy="60" r="6" fill="white"/>
+  <polygon points="130,85 120,65 140,65" fill="#e74c3c"/>
+  <!-- Question mark -->
+  <text x="100" y="180" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="bold" fill="#2980b9">where?</text>
+</svg>
