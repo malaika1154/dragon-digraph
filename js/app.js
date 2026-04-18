@@ -100,6 +100,7 @@
   /* ---- Background Music (YouTube IFrame API) ---- */
   let ytPlayer = null;
   let musicMuted = false;
+  let musicRequested = false;
 
   // Load the YouTube IFrame API script
   const ytScript = document.createElement('script');
@@ -111,12 +112,16 @@
       videoId: 'myZFE73HX28',
       playerVars: { autoplay: 0, loop: 1, playlist: 'myZFE73HX28', controls: 0 },
       events: {
-        onReady: function () { ytPlayer.setVolume(30); }
+        onReady: function () {
+          ytPlayer.setVolume(30);
+          if (musicRequested) startBgMusic();
+        }
       }
     });
   };
 
   function startBgMusic() {
+    musicRequested = true;
     if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
       ytPlayer.playVideo();
       document.getElementById('btn-music-toggle').style.display = 'block';
