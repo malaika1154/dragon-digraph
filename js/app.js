@@ -97,44 +97,26 @@
   /* =============================================
      TITLE / PLAY SCREEN
      ============================================= */
-  /* ---- Background Music (YouTube IFrame API) ---- */
-  let ytPlayer = null;
+  /* ---- Background Music (local MP3) ---- */
+  const bgMusic = new Audio('background music .mp3');
+  bgMusic.loop = true;
+  bgMusic.volume = 0.3;
   let musicMuted = false;
-  let musicRequested = false;
-
-  // Load the YouTube IFrame API script
-  const ytScript = document.createElement('script');
-  ytScript.src = 'https://www.youtube.com/iframe_api';
-  document.head.appendChild(ytScript);
-
-  window.onYouTubeIframeAPIReady = function () {
-    ytPlayer = new YT.Player('yt-player', {
-      videoId: 'myZFE73HX28',
-      playerVars: { autoplay: 0, loop: 1, playlist: 'myZFE73HX28', controls: 0 },
-      events: {
-        onReady: function () {
-          ytPlayer.setVolume(30);
-          if (musicRequested) startBgMusic();
-        }
-      }
-    });
-  };
 
   function startBgMusic() {
-    musicRequested = true;
-    if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
-      ytPlayer.playVideo();
+    bgMusic.play().then(() => {
       document.getElementById('btn-music-toggle').style.display = 'block';
-    }
+    }).catch(() => {
+      // Browser blocked autoplay; will retry on next user interaction
+    });
   }
 
   document.getElementById('btn-music-toggle').addEventListener('click', () => {
-    if (!ytPlayer) return;
     if (musicMuted) {
-      ytPlayer.unMute();
+      bgMusic.muted = false;
       document.getElementById('btn-music-toggle').textContent = '🔊';
     } else {
-      ytPlayer.mute();
+      bgMusic.muted = true;
       document.getElementById('btn-music-toggle').textContent = '🔇';
     }
     musicMuted = !musicMuted;
