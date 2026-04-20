@@ -98,7 +98,7 @@
      TITLE / PLAY SCREEN
      ============================================= */
   /* ---- Background Music (local MP3) ---- */
-  const bgMusic = new Audio('background%20music%20.mp3');
+  const bgMusic = new Audio('background-music.mp3');
   bgMusic.loop = true;
   bgMusic.volume = 0.3;
   bgMusic.preload = 'auto';
