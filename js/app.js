@@ -98,22 +98,38 @@
      TITLE / PLAY SCREEN
      ============================================= */
   /* ---- Background Music (local MP3) ---- */
-  const bgMusic = new Audio('background music .mp3');
+  const bgMusic = new Audio('background%20music%20.mp3');
   bgMusic.loop = true;
   bgMusic.volume = 0.3;
+  bgMusic.preload = 'auto';
   let musicMuted = false;
+  let musicStarted = false;
 
   function startBgMusic() {
-    bgMusic.play().then(() => {
-      document.getElementById('btn-music-toggle').style.display = 'block';
-    }).catch(() => {
-      // Browser blocked autoplay; will retry on next user interaction
-    });
+    musicStarted = true;
+    const p = bgMusic.play();
+    if (p !== undefined) {
+      p.then(() => {
+        document.getElementById('btn-music-toggle').style.display = 'block';
+      }).catch((err) => {
+        console.warn('Music play failed:', err);
+      });
+    }
   }
+
+  // Retry music on any user interaction if it hasn't started yet
+  document.addEventListener('click', () => {
+    if (musicStarted && bgMusic.paused && !musicMuted) {
+      bgMusic.play().catch(() => {});
+    }
+    // Resume AudioContext if suspended (needed for click sounds too)
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  });
 
   document.getElementById('btn-music-toggle').addEventListener('click', () => {
     if (musicMuted) {
       bgMusic.muted = false;
+      bgMusic.play().catch(() => {});
       document.getElementById('btn-music-toggle').textContent = '🔊';
     } else {
       bgMusic.muted = true;
